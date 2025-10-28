@@ -313,5 +313,173 @@ class RegistroCompras:
                 if cantidad > producto['stock']:
                     print("Stock insuficiente.")
                     continue
+
+
+  # Actualizar stock
+                self.sistema.productos[producto_nombre]['stock'] -= cantidad
                 
+                subtotal = producto['precio'] * cantidad
+                total += subtotal
+                
+                productos_compra.append({
+                    'producto': producto_nombre,
+                    'cantidad': cantidad,
+                    'precio_unitario': producto['precio'],
+                    'subtotal': subtotal
+                })
+                
+                print(f"Producto agregado. Subtotal: ${subtotal:.2f}")
+                
+            except ValueError:
+                print("Cantidad invalida.")
+        
+        if productos_compra:
+            compra = {
+                'cliente': nombre_cliente,
+                'fecha': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                'productos': productos_compra,
+                'total': total
+            }
+            
+            self.sistema.compras.append(compra)
+            self.sistema.guardar_datos()
+            print(f"\nCompra registrada exitosamente.")
+            print(f"Total de la compra: ${total:.2f}")
+        else:
+            print("No se registraron productos en la compra.")
+
+class Reportes:
+    def __init__(self, sistema: SistemaGestion):
+        self.sistema = sistema
+    
+    def clientes_frecuentes(self):
+        """Generar reporte de clientes mas frecuentes"""
+        print("\n--- CLIENTES MAS FRECUENTES ---")
+        
+        if not self.sistema.visitas:
+            print("No hay datos de visitas.")
+            return
+        
+        clientes_ordenados = sorted(self.sistema.visitas.items(), 
+                                  key=lambda x: x[1], reverse=True)
+        
+        for i, (cliente, visitas) in enumerate(clientes_ordenados[:10], 1):
+            telefono = self.sistema.clientes.get(cliente, {}).get('telefono', 'N/A')
+            print(f"{i}. {cliente} - Tel: {telefono} - Visitas: {visitas}")
+    
+    def productos_populares(self):
+        """Generar reporte de productos mas vendidos"""
+        print("\n--- PRODUCTOS MAS VENDIDOS ---")
+        
+        if not self.sistema.compras:
+            print("No hay datos de compras.")
+            return
+        
+        ventas_productos = {}
+        
+        for compra in self.sistema.compras:
+            for producto in compra['productos']:
+                nombre = producto['producto']
+                cantidad = producto['cantidad']
+                if nombre in ventas_productos:
+                    ventas_productos[nombre] += cantidad
+                else:
+                    ventas_productos[nombre] = cantidad
+        
+        productos_ordenados = sorted(ventas_productos.items(), 
+                                   key=lambda x: x[1], reverse=True)
+        
+        for i, (producto, cantidad) in enumerate(productos_ordenados[:10], 1):
+            print(f"{i}. {producto} - Vendidos: {cantidad}")
+
+def main():
+    """Funcion principal del sistema"""
+    sistema = SistemaGestion()
+    gestion_clientes = GestionClientes(sistema)
+    gestion_productos = GestionProductos(sistema)
+    registro_compras = RegistroCompras(sistema)
+    reportes = Reportes(sistema)
+    
+    while True:
+        print("\n" + "="*50)
+        print("          SISTEMA DE GESTION COMERCIAL")
+        print("="*50)
+        print("1. Gestion de Clientes")
+        print("2. Gestion de Productos")
+        print("3. Registrar Compra")
+        print("4. Reportes")
+        print("5. Salir")
+        print("-"*50)
+        
+        try:
+            opcion = int(input("Seleccione una opcion: "))
+            
+            if opcion == 1:
+                # Submenu Gestion de Clientes
+                print("\n--- GESTION DE CLIENTES ---")
+                print("1. Registrar nuevo cliente")
+                print("2. Eliminar cliente")
+                print("3. Consultar/editar cliente")
+                print("4. Listar todos los clientes")
+                
+                sub_opcion = int(input("Seleccione opcion: "))
+                if sub_opcion == 1:
+                    gestion_clientes.registrar_cliente()
+                elif sub_opcion == 2:
+                    gestion_clientes.eliminar_cliente()
+                elif sub_opcion == 3:
+                    gestion_clientes.consultar_editar_cliente()
+                elif sub_opcion == 4:
+                    gestion_clientes.listar_clientes()
+                else:
+                    print("Opcion invalida.")
+            
+            elif opcion == 2:
+                # Submenu Gestion de Productos
+                print("\n--- GESTION DE PRODUCTOS ---")
+                print("1. Ver menu por categorias")
+                print("2. Agregar producto")
+                print("3. Editar producto")
+                
+                sub_opcion = int(input("Seleccione opcion: "))
+                if sub_opcion == 1:
+                    gestion_productos.mostrar_menu_categorias()
+                elif sub_opcion == 2:
+                    gestion_productos.agregar_producto()
+                elif sub_opcion == 3:
+                    gestion_productos.editar_producto()
+                else:
+                    print("Opcion invalida.")
+            
+            elif opcion == 3:
+                registro_compras.registrar_compra()
+            
+            elif opcion == 4:
+                # Submenu Reportes
+                print("\n--- REPORTES ---")
+                print("1. Clientes mas frecuentes")
+                print("2. Productos mas vendidos")
+                
+                sub_opcion = int(input("Seleccione opcion: "))
+                if sub_opcion == 1:
+                    reportes.clientes_frecuentes()
+                elif sub_opcion == 2:
+                    reportes.productos_populares()
+                else:
+                    print("Opcion invalida.")
+            
+            elif opcion == 5:
+                print("Hasta luego!")
+                break
+            
+            else:
+                print("Opcion invalida. Por favor seleccione 1-5.")
+        
+        except ValueError:
+            print("Por favor ingrese un numero valido.")
+
+if __name__ == "__main__":
+    main()
+            
+
               
