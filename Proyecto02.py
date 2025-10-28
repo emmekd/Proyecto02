@@ -250,20 +250,6 @@ class GestionProductos:
             print("Valor invalido.") 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # segunda parte
 
 
