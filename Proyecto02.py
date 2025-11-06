@@ -132,7 +132,7 @@ class GestionClientes:
 class GestionProductos:
     def __init__(self, sistema: SistemaGestion):
         self.sistema = sistema
-        self.categorias = ['Electronicos', 'Ropa', 'Hogar', 'Deportes', 'Otros']
+        self.categorias = ['Muebles de dormitorio', 'Muebles de sala', 'Muebles de oficina', 'Mueble para comercio y exhibicion', 'Mobiliario Especializado']
     
     def mostrar_menu_categorias(self):
         """Mostrar menu de productos por categorias"""
@@ -466,6 +466,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-            
-
-              
+    
