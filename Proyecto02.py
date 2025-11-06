@@ -12,7 +12,6 @@ class SistemaGestion:
         self.cargar_datos()
     
     def cargar_datos(self):
-        """Cargar datos desde archivos JSON"""
         try:
             with open('clientes.json', 'r') as f:
                 self.clientes = json.load(f)
@@ -38,7 +37,6 @@ class SistemaGestion:
             self.visitas = {}
     
     def guardar_datos(self):
-        """Guardar datos en archivos JSON"""
         with open('clientes.json', 'w') as f:
             json.dump(self.clientes, f, indent=2)
         
@@ -77,7 +75,6 @@ class GestionClientes:
         print("Cliente registrado exitosamente.")
     
     def eliminar_cliente(self):
-        """Eliminar un cliente"""
         print("\n--- ELIMINAR CLIENTE ---")
         nombre = input("Nombre del cliente a eliminar: ").strip()
         
@@ -94,7 +91,6 @@ class GestionClientes:
             print("Cliente eliminado exitosamente.")
     
     def consultar_editar_cliente(self):
-        """Consultar y editar información del cliente"""
         print("\n--- CONSULTAR/EDITAR CLIENTE ---")
         nombre = input("Nombre del cliente: ").strip()
         
@@ -119,7 +115,6 @@ class GestionClientes:
                 print("Informacion actualizada.")
     
     def listar_clientes(self):
-        """Listar todos los clientes"""
         print("\n--- LISTA DE CLIENTES ---")
         if not self.sistema.clientes:
             print("No hay clientes registrados.")
@@ -135,7 +130,6 @@ class GestionProductos:
         self.categorias = ['Muebles de dormitorio', 'Muebles de sala', 'Muebles de oficina', 'Mueble para comercio y exhibicion', 'Mobiliario Especializado']
     
     def mostrar_menu_categorias(self):
-        """Mostrar menu de productos por categorias"""
         print("\n--- CATEGORIAS DE PRODUCTOS ---")
         for i, categoria in enumerate(self.categorias, 1):
             print(f"{i}. {categoria}")
@@ -150,7 +144,6 @@ class GestionProductos:
             print("Por favor ingrese un numero valido.")
     
     def mostrar_productos_categoria(self, categoria):
-        """Mostrar productos de una categoria especifica"""
         print(f"\n--- PRODUCTOS DE {categoria.upper()} ---")
         productos_categoria = {k: v for k, v in self.sistema.productos.items() 
                              if v['categoria'] == categoria}
@@ -163,7 +156,6 @@ class GestionProductos:
             print(f"{i}. {nombre} - ${info['precio']:.2f} - Stock: {info['stock']}")
     
     def agregar_producto(self):
-        """Agregar un nuevo producto"""
         print("\n--- AGREGAR PRODUCTO ---")
         nombre = input("Nombre del producto: ").strip()
         
@@ -202,7 +194,6 @@ class GestionProductos:
         print("Producto agregado exitosamente.")
     
     def editar_producto(self):
-        """Editar informacion de un producto"""
         print("\n--- EDITAR PRODUCTO ---")
         nombre = input("Nombre del producto a editar: ").strip()
         
