@@ -270,7 +270,7 @@ class RegistroCompras:
         while True:
             print("\nProductos disponibles:")
             for i, (nombre, info) in enumerate(self.sistema.productos.items(), 1):
-                print(f"{i}. {nombre} - ${info['precio']:.2f} - Stock: {info['stock']}")
+                print(f"{i}. {nombre} - Q{info['precio']:.2f} - Stock: {info['stock']}")
             
             producto_nombre = input("\nNombre del producto (o 'fin' para terminar): ").strip()
             if producto_nombre.lower() == 'fin':
